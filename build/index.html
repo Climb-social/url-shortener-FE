@@ -1,0 +1,44 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en-GB"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang="en-GB"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang="en-GB"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lass="no-js" lang="en-GB"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>100 Shapes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="fragment" content="!">
+    <base href="/">
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <![endif]-->
+</head>
+<body layout="column"
+      ng-controller="MainCtrl as vm">
+
+<md-toolbar layout="row">
+    <div class="md-toolbar-tools">
+        <h1>100 Shapes URL generator</h1>
+
+        <span flex></span>
+
+        <md-button aria-label="Log out"
+                   ng-click="vm.Auth.$unauth()"
+                   ng-if="vm.Auth.$getAuth()">
+            Log out
+        </md-button>
+    </div>
+</md-toolbar>
+
+
+<md-content layout="row"
+            flex
+            layout-align="center start"
+            class="md-padding"
+            ui-view>
+</md-content>
+
+
+<script src="/bundle.js"></script></body>
+</html>

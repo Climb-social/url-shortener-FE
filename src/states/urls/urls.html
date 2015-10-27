@@ -1,0 +1,198 @@
+<div flex-gt-md="50"
+     flex-gt-sm="90"
+     flex="100">
+
+    <form name="vm.urlForm" novalidate>
+
+        <md-card ng-disabled="vm.isSaving">
+            <md-card-content>
+                <h2 class="md-title">URL to share</h2>
+
+                <md-input-container>
+                    <label>URL to share</label>
+                    <input ng-model="vm.inputUrl"
+                           required
+                           ng-change="vm.onUrlChange()"
+                           ng-model-options="{updateOn: 'blur'}"
+                           name="url"
+                           type="url"
+                           ng-pattern="/http://climb.social/*/">
+
+                    <div ng-messages="vm.urlForm.url.$error"
+                         ng-if="vm.urlForm.url.$touched">
+                        <div ng-message="required">Whoa there! You <b>need</b> to fill me in.</div>
+                        <div ng-message="pattern">Whoa there! I only shorten URLs for <b>Climb</b>.</div>
+                    </div>
+                </md-input-container>
+
+            </md-card-content>
+        </md-card>
+
+        <md-card ng-if="vm.configurations.length">
+
+            <md-list>
+                <md-subheader class="md-no-sticky">Short URLs</md-subheader>
+                <md-list-item class="md-3-line"
+                              ng-repeat="configuration in vm.configurations track by configuration.$id"
+                              ng-click="vm.setOutputUrl(configuration.shortUrl)">
+
+                    <ng-md-icon icon="{{ configuration.source }}"
+                                class="md-avatar"
+                                size="34">
+
+                    </ng-md-icon>
+
+                    <div class="md-list-item-text">
+                        <h3>{{ configuration.campaign }}</h3>
+                        <h4>{{ configuration.source }}</h4>
+
+                        <p>{{ configuration.medium }}</p>
+                    </div>
+
+                    <md-divider></md-divider>
+
+                </md-list-item>
+
+            </md-list>
+
+        </md-card>
+
+        <md-card ng-disabled="vm.isSaving"
+                 ng-if="vm.inputUrl">
+
+            <md-card-content>
+                <h2 class="md-title">
+                    Not listed above? Create a new link to share
+                </h2>
+
+
+                <div flex layout="row">
+                    <md-autocomplete flex="50" required
+                                     md-input-name="campaign"
+                                     md-search-text="vm.params.campaign"
+                                     md-items="campaign in vm.allCampaigns()"
+                                     md-item-text="campaign.name"
+                                     md-floating-label="Campaign">
+                        <md-item-template>
+                        <span md-highlight-text="vm.params.campaign"
+                              md-highlight-flags="^i">
+                            {{ campaign.name }}
+                        </span>
+                        </md-item-template>
+
+                        <div ng-messages="vm.urlForm.campaign.$error"
+                             ng-if="vm.urlForm.campaign.$touched">
+
+                            <div ng-message="required">I'm <b>required</b>.</div>
+                        </div>
+                    </md-autocomplete>
+
+                    <div flex="10"></div>
+
+                    <div flex>
+                        <p class="md-caption">The individual campaign name, slogan, promo code, etc. for a product.</p>
+                    </div>
+
+                </div>
+
+                <div flex layout="row">
+                    <md-autocomplete flex="50" required
+                                     md-input-name="source"
+                                     md-search-text="vm.params.source"
+                                     md-items="source in vm.allSources()"
+                                     md-item-text="source.name"
+                                     md-floating-label="Where are you sharing? i.e. 'Twitter'">
+                        <md-item-template>
+                        <span md-highlight-text="vm.params.source"
+                              md-highlight-flags="^i">
+                            {{ source.name }}
+                        </span>
+                        </md-item-template>
+
+                        <div ng-messages="vm.urlForm.source.$error"
+                             ng-if="vm.urlForm.source.$touched">
+                            <div ng-message="required">I'm <b>required</b>.</div>
+                        </div>
+                    </md-autocomplete>
+
+                    <div flex="10"></div>
+
+                    <div flex>
+                        <p class="md-caption">Identify the advertiser, site, publication, etc. that is sending traffic
+                            to your property, for example: google, newsletter4, billboard.</p>
+                    </div>
+
+                </div>
+
+                <div flex layout="row">
+                    <md-autocomplete flex="50"
+                                     md-input-name="medium"
+                                     md-search-text="vm.params.medium"
+                                     md-items="medium in vm.allMediumsForSource(vm.params.source)"
+                                     md-item-text="medium.$id"
+                                     md-floating-label="As a what? i.e. 'post'">
+                        <md-item-template>
+                        <span md-highlight-text="vm.params.medium"
+                              md-highlight-flags="^i">
+                            {{ medium.$id }}
+                        </span>
+                        </md-item-template>
+
+                    </md-autocomplete>
+
+                    <div flex="10"></div>
+
+                    <div flex>
+                        <p class="md-caption">The advertising or marketing medium, for example: cpc, banner, email
+                            newsletter.</p>
+                    </div>
+
+                </div>
+
+                <div flex layout="row">
+                    <md-input-container flex="50">
+                        <label>Where precisely? i.e. "Trev's wall"</label>
+                        <input ng-model="vm.params.content">
+                    </md-input-container>
+
+                    <div flex="10"></div>
+
+                    <div flex>
+                        <p class="md-caption">Used to differentiate similar content, or links within the same ad. For example, if you have two call-to-action links within the same email message, you can use utm_content and set different values for each so you can tell which version is more effective.</p>
+                    </div>
+
+                </div>
+
+
+            </md-card-content>
+
+            <div class="md-actions" layout="row" layout-align="center center">
+                <md-button ng-click="vm.create()"
+                           ng-disabled="vm.urlForm.$invalid"
+                           class="md-raised md-primary">
+
+                    Create
+                </md-button>
+
+                <md-button ng-click="vm.reset()">
+                    Reset
+                </md-button>
+            </div>
+        </md-card>
+
+        <md-card ng-if="vm.outputUrl">
+            <md-card-content>
+                <h2 class="md-title">Share this</h2>
+                <md-input-container>
+                    <label>
+                        Short URL
+                    </label>
+                    <input type="url"
+                           ng-model="vm.outputUrl"/>
+                </md-input-container>
+            </md-card-content>
+        </md-card>
+
+    </form>
+
+</div>
